@@ -1,48 +1,79 @@
-# RevocationBench OSF Code Artifact
+# CURE: Recovering Persistent Multi-Agent State After Agent Compromise
 
-This minimal artifact accompanies *Recovering Persistent Multi-Agent State
-After Agent Compromise*. It contains only the implementation used for the
-experiments and the model prompt templates.
+This repository accompanies the research paper **"CURE: Recovering Persistent Multi-Agent State After Agent Compromise,"** accepted at the *Workshop on Agentic AI in Offensive and Defensive Cyber Operations (AIDC 2026)*.
 
-It does **not** contain the paper, saved model outputs, experimental results,
-or table-reproduction utilities.
+CURE is a provenance-based recovery approach for persistent multi-agent LLM systems. When an agent or service is compromised, its information may remain in the memories and decisions of other agents. CURE addresses this problem by combining LLM-assisted claim extraction with deterministic provenance-based recovery to identify and quarantine claims that lose sufficient support while preserving independently supported information.
 
-## Contents
+## Repository Contents
 
-- `code/models.py`: records, claims, evidence, and certificate types.
-- `code/workflow.py`: queue-until-empty persistent multi-agent workflow.
-- `code/prompting.py`: record-level Prompting baseline and exact final prompt.
-- `code/cure.py`: trace validation and deterministic claim-level revocation.
-- `code/run_example.py`: runnable mixed-record recovery example.
-- `prompts/workflow_agents.md`: workflow-agent developer and user prompts.
-- `prompts/prompting.md`: Prompting baseline prompts, including the earlier
-  template used for three initial per-agent decisions.
-- `prompts/cure_semantic_parser.md`: CURE extraction and bounded-repair
-  prompts.
+The repository provides a compact reference implementation and the prompt templates associated with the research.
 
-## Environment
+| File | Description |
+|---|---|
+| `models.py` | Data structures for records, claims, evidence, and recovery certificates |
+| `workflow.py` | Queue-driven persistent multi-agent workflow |
+| `prompting.py` | Record-level prompting recovery baseline |
+| `cure.py` | Trace validation and deterministic claim-level recovery |
+| `run_example.py` | Runnable example demonstrating recovery of mixed records |
+| `cure_semantic_parser.md` | CURE claim-extraction and bounded-repair prompts |
+| `prompting.md` | Prompting baseline templates |
+| `workflow_agents.md` | Multi-agent workflow prompts |
+| `requirements.txt` | Python dependency information |
+| `ebxph-osfstorage-archive.zip` | Archived research artifact package |
 
-The reference code requires Python 3.11 or newer and has no third-party
-dependencies:
+## Getting Started
 
-```bash
-python3.11 code/run_example.py
-```
+**Requirements:** Python 3.11 or newer.
 
-`requirements.txt` documents that the example uses only the standard library.
-The `model_call` accepted by `prompting.recover` is intentionally provider
-neutral; an adopter supplies its own model client.
+The reference implementation uses only the Python standard library and does not require third-party packages.
 
-## Workflow termination
+Clone the repository and run the included example from the repository root:
 
-This reference workflow has no turn-count ceiling. It continues processing
-messages until the workflow queue is empty. It is a compact explanatory
-implementation, not the historical experiment harness and not code for
-reproducing the paper's numerical results.
+`python3 run_example.py`
 
-The final Prompting template produced 333 of 336 per-agent cleanup decisions.
-Three initial Gemini decisions used the earlier template, which is also
-included verbatim in `prompts/prompting.md`.
+The example demonstrates how CURE uses recorded provenance and claim-level support relationships to determine which claims can remain available after source revocation.
 
-No API keys, provider endpoints, billing ledgers, service logs, manuscript
-files, or experimental outputs are included.
+## How CURE Works
+
+CURE separates recovery into three stages:
+
+1. **Claim extraction:** An LLM decomposes stored records into individual claims and proposes supporting evidence and prerequisites.
+2. **Trace validation:** Proposed evidence references are checked against recorded provenance.
+3. **Deterministic recovery:** Claims without sufficient surviving support or required prerequisites are quarantined, while independently supported claims can remain available.
+
+The LLM proposes the semantic relationships; deterministic rules make the final recovery decisions.
+
+## Implementation Notes
+
+The reference workflow processes messages until its queue becomes empty, without a fixed turn-count limit.
+
+The prompting baseline accepts a provider-independent `model_call` interface, allowing users to supply their own model client.
+
+For reproducibility context, the final Prompting template was used for 333 of 336 per-agent cleanup decisions in the study. Three initial Gemini decisions used an earlier template, also included in `prompting.md`.
+
+## Scope and Limitations
+
+This repository is a **compact explanatory reference implementation**, not the complete historical experimental harness.
+
+It is intended to illustrate CURE's recovery mechanisms and provide relevant prompt templates. It does not reproduce the paper's numerical evaluation results.
+
+The repository does not include:
+
+- Saved model responses or experimental outputs
+- Full experimental datasets or execution logs
+- Numerical result-reproduction scripts
+- Model-provider API keys or credentials
+
+CURE assumes recorded provenance is available for recovery. Its trace validation establishes structural consistency of evidence references, not independent verification of their semantic correctness.
+
+## Research
+
+**Paper:** CURE: Recovering Persistent Multi-Agent State After Agent Compromise
+
+**Venue:** Workshop on Agentic AI in Offensive and Defensive Cyber Operations (AIDC 2026)
+
+**Authors:** Vishnu Narayanan Anilkumar and Arjun Arunasalam
+
+**Affiliation:** Florida International University
+
+This repository is provided to support research transparency and understanding of provenance-based recovery in persistent multi-agent systems.
