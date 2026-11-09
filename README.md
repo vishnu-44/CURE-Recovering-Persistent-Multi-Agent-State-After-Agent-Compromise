@@ -43,37 +43,3 @@ CURE separates recovery into three stages:
 
 The LLM proposes the semantic relationships; deterministic rules make the final recovery decisions.
 
-## Implementation Notes
-
-The reference workflow processes messages until its queue becomes empty, without a fixed turn-count limit.
-
-The prompting baseline accepts a provider-independent `model_call` interface, allowing users to supply their own model client.
-
-For reproducibility context, the final Prompting template was used for 333 of 336 per-agent cleanup decisions in the study. Three initial Gemini decisions used an earlier template, also included in `prompting.md`.
-
-## Scope and Limitations
-
-This repository is a **compact explanatory reference implementation**, not the complete historical experimental harness.
-
-It is intended to illustrate CURE's recovery mechanisms and provide relevant prompt templates. It does not reproduce the paper's numerical evaluation results.
-
-The repository does not include:
-
-- Saved model responses or experimental outputs
-- Full experimental datasets or execution logs
-- Numerical result-reproduction scripts
-- Model-provider API keys or credentials
-
-CURE assumes recorded provenance is available for recovery. Its trace validation establishes structural consistency of evidence references, not independent verification of their semantic correctness.
-
-## Research
-
-**Paper:** CURE: Recovering Persistent Multi-Agent State After Agent Compromise
-
-**Venue:** Workshop on Agentic AI in Offensive and Defensive Cyber Operations (AIDC 2026)
-
-**Authors:** Vishnu Narayanan Anilkumar and Arjun Arunasalam
-
-**Affiliation:** Florida International University
-
-This repository is provided to support research transparency and understanding of provenance-based recovery in persistent multi-agent systems.
